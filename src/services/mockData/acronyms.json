@@ -1,0 +1,47 @@
+[
+  {
+    "Id": 1,
+    "acronym": "SMART",
+    "originalText": "Setting clear objectives requires being Specific, Measurable, Achievable, Relevant, and Time-bound to ensure success in project management and personal development goals.",
+    "breakdown": [
+      { "letter": "S", "word": "Specific" },
+      { "letter": "M", "word": "Measurable" },
+      { "letter": "A", "word": "Achievable" },
+      { "letter": "R", "word": "Relevant" },
+      { "letter": "T", "word": "Time-bound" }
+    ],
+    "createdAt": "2024-01-15T10:30:00Z",
+    "category": "Productivity",
+    "isFavorite": true
+  },
+  {
+    "Id": 2,
+    "acronym": "PEACE",
+    "originalText": "Mindfulness practices help us find inner calm through being Present, Embracing acceptance, Acknowledging thoughts without judgment, Cultivating compassion, and Establishing daily routines.",
+    "breakdown": [
+      { "letter": "P", "word": "Present" },
+      { "letter": "E", "word": "Embracing" },
+      { "letter": "A", "word": "Acknowledging" },
+      { "letter": "C", "word": "Cultivating" },
+      { "letter": "E", "word": "Establishing" }
+    ],
+    "createdAt": "2024-01-14T15:45:00Z",
+    "category": "Wellness",
+    "isFavorite": false
+  },
+  {
+    "Id": 3,
+    "acronym": "LEARN",
+    "originalText": "Effective studying involves Listening actively, Engaging with material, Asking questions, Reviewing regularly, and taking detailed Notes to retain information better.",
+    "breakdown": [
+      { "letter": "L", "word": "Listening" },
+      { "letter": "E", "word": "Engaging" },
+      { "letter": "A", "word": "Asking" },
+      { "letter": "R", "word": "Reviewing" },
+      { "letter": "N", "word": "Notes" }
+    ],
+    "createdAt": "2024-01-13T09:15:00Z",
+    "category": "Education",
+    "isFavorite": true
+  }
+]
