@@ -87,63 +87,96 @@ function enhanceWord(originalWord, allWords) {
   return originalWord
 }
 
-export async function generateAcronym(text, forceRegenerate = false) {
-  // Simulate API call delay
+export async function summarizeText(text, forceRegenerate = false) {
+  // Simulate AI processing delay
   await new Promise(resolve => setTimeout(resolve, Math.random() * 2000 + 1000))
   
-  if (!text || text.trim().length < 10) {
-    throw new Error("Text must be at least 10 characters long")
+  if (!text || text.trim().length < 50) {
+    throw new Error("Text must be at least 50 characters long for effective summarization")
   }
   
   const keyWords = extractKeyWords(text)
   
   if (keyWords.length === 0) {
-    throw new Error("Unable to extract meaningful words from the text")
+    throw new Error("Unable to extract meaningful concepts from the text")
   }
   
-  // Generate multiple attempts and pick the best one
-  const attempts = []
-  for (let i = 0; i < 3; i++) {
-    const result = generateAcronymFromWords(keyWords, null)
-    if (result) {
-      attempts.push(result)
+  // Generate a concise summary focused on key concepts
+  const summary = generateConceptSummary(text, keyWords)
+  
+  return { summary }
+}
+
+function generateConceptSummary(originalText, keyWords) {
+  // Split text into sentences for analysis
+  const sentences = originalText
+    .split(/[.!?]+/)
+    .map(s => s.trim())
+    .filter(s => s.length > 10)
+  
+  // Score sentences based on keyword presence and position
+  const scoredSentences = sentences.map((sentence, index) => {
+    let score = 0
+    
+    // Higher score for sentences containing key words
+    keyWords.forEach(keyword => {
+      if (sentence.toLowerCase().includes(keyword.toLowerCase())) {
+        score += 2
+      }
+    })
+    
+    // Bonus for position (beginning and end sentences are often important)
+    if (index === 0 || index === sentences.length - 1) {
+      score += 1
+    }
+    
+    // Bonus for sentence length (not too short, not too long)
+    if (sentence.length >= 20 && sentence.length <= 100) {
+      score += 1
+    }
+    
+    return { sentence, score, index }
+  })
+  
+  // Sort by score and select top sentences
+  const topSentences = scoredSentences
+    .sort((a, b) => b.score - a.score)
+    .slice(0, Math.min(5, sentences.length))
+    .sort((a, b) => a.index - b.index) // Restore original order
+  
+  // Build summary ensuring it's around 150 words
+  let summary = ""
+  let wordCount = 0
+  const targetWords = 150
+  
+  for (const item of topSentences) {
+    const sentenceWords = item.sentence.split(/\s+/).length
+    
+    if (wordCount + sentenceWords <= targetWords + 20) { // Allow slight overflow
+      summary += (summary ? " " : "") + item.sentence + "."
+      wordCount += sentenceWords
+    }
+    
+    if (wordCount >= targetWords - 20) { // Stop when we reach target range
+      break
     }
   }
   
-  if (attempts.length === 0) {
-    throw new Error("Failed to generate acronym from the provided text")
+  // If summary is too short, add more content
+  if (wordCount < 100 && sentences.length > topSentences.length) {
+    const remainingSentences = scoredSentences
+      .filter(item => !topSentences.some(selected => selected.index === item.index))
+      .sort((a, b) => b.score - a.score)
+    
+    for (const item of remainingSentences) {
+      const sentenceWords = item.sentence.split(/\s+/).length
+      if (wordCount + sentenceWords <= targetWords + 30) {
+        summary += " " + item.sentence + "."
+        wordCount += sentenceWords
+      }
+      if (wordCount >= 120) break
+    }
   }
   
-  // Pick the attempt with the most pronounceable acronym
-  const bestAttempt = attempts.reduce((best, current) => {
-    const bestScore = scoreAcronym(best.acronym)
-    const currentScore = scoreAcronym(current.acronym)
-    return currentScore > bestScore ? current : best
-  })
-  
-  return bestAttempt
-}
-
-function scoreAcronym(acronym) {
-  let score = 0
-  
-  // Prefer shorter acronyms (3-5 letters)
-  if (acronym.length >= 3 && acronym.length <= 5) {
-    score += 10
-  }
-  
-  // Bonus for having vowels (more pronounceable)
-  const vowels = (acronym.match(/[AEIOU]/g) || []).length
-  score += vowels * 2
-  
-  // Bonus for alternating consonants and vowels
-  let alternating = 0
-  for (let i = 0; i < acronym.length - 1; i++) {
-    const current = /[AEIOU]/.test(acronym[i])
-    const next = /[AEIOU]/.test(acronym[i + 1])
-    if (current !== next) alternating++
-  }
-  score += alternating
-  
-  return score
+  return summary.trim()
 }

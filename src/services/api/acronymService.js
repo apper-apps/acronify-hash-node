@@ -2,7 +2,7 @@ import mockData from "@/services/mockData/acronyms.json"
 
 class AcronymService {
   constructor() {
-    this.storageKey = "acronify_data"
+this.storageKey = "conceptlearner_data"
     this.data = this.loadFromStorage()
   }
 
@@ -38,7 +38,7 @@ class AcronymService {
     await this.simulateDelay()
     const item = this.data.find(item => item.Id === parseInt(id))
     if (!item) {
-      throw new Error(`Acronym with Id ${id} not found`)
+throw new Error(`Concept with Id ${id} not found`)
     }
     return { ...item }
   }
@@ -66,7 +66,7 @@ class AcronymService {
     
     const index = this.data.findIndex(item => item.Id === parseInt(id))
     if (index === -1) {
-      throw new Error(`Acronym with Id ${id} not found`)
+throw new Error(`Concept with Id ${id} not found`)
     }
     
     const updatedItem = { ...this.data[index], ...data, Id: parseInt(id) }
@@ -80,7 +80,7 @@ class AcronymService {
     
     const index = this.data.findIndex(item => item.Id === parseInt(id))
     if (index === -1) {
-      throw new Error(`Acronym with Id ${id} not found`)
+throw new Error(`Concept with Id ${id} not found`)
     }
     
     const deletedItem = this.data[index]

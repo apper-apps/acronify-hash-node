@@ -11,76 +11,76 @@ import Error from "@/components/ui/Error"
 import Empty from "@/components/ui/Empty"
 
 function App() {
-  const [acronyms, setAcronyms] = useState([])
-  const [filteredAcronyms, setFilteredAcronyms] = useState([])
+  const [concepts, setConcepts] = useState([])
+  const [filteredConcepts, setFilteredConcepts] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
 
   useEffect(() => {
-    loadAcronyms()
+    loadConcepts()
   }, [])
 
-  useEffect(() => {
+useEffect(() => {
     if (searchQuery.trim()) {
-      const filtered = acronyms.filter(acronym => 
-        acronym.acronym.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        acronym.originalText.toLowerCase().includes(searchQuery.toLowerCase())
+      const filtered = concepts.filter(concept => 
+        concept.summary.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        concept.originalText.toLowerCase().includes(searchQuery.toLowerCase())
       )
-      setFilteredAcronyms(filtered)
+      setFilteredConcepts(filtered)
     } else {
-      setFilteredAcronyms(acronyms)
+      setFilteredConcepts(concepts)
     }
-  }, [acronyms, searchQuery])
+  }, [concepts, searchQuery])
 
-  const loadAcronyms = async () => {
+const loadConcepts = async () => {
     try {
       setError("")
       setLoading(true)
       const data = await acronymService.getAll()
-      setAcronyms(data)
+      setConcepts(data)
     } catch (err) {
-      setError("Failed to load acronyms")
+      setError("Failed to load concepts")
     } finally {
       setLoading(false)
     }
   }
 
-  const handleCreateAcronym = async (acronymData) => {
+const handleCreateConcept = async (conceptData) => {
     try {
-      const newAcronym = await acronymService.create(acronymData)
-      setAcronyms(prev => [newAcronym, ...prev])
+      const newConcept = await acronymService.create(conceptData)
+      setConcepts(prev => [newConcept, ...prev])
       setIsModalOpen(false)
     } catch (err) {
-      throw new Error("Failed to create acronym")
+      throw new Error("Failed to create concept")
     }
   }
 
-  const handleDeleteAcronym = async (id) => {
+const handleDeleteConcept = async (id) => {
     try {
       await acronymService.delete(id)
-      setAcronyms(prev => prev.filter(acronym => acronym.Id !== id))
+      setConcepts(prev => prev.filter(concept => concept.Id !== id))
     } catch (err) {
-      throw new Error("Failed to delete acronym")
+      throw new Error("Failed to delete concept")
     }
   }
 
-  const handleToggleFavorite = async (id) => {
+const handleToggleFavorite = async (id) => {
     try {
-      const acronym = acronyms.find(a => a.Id === id)
-      const updatedAcronym = await acronymService.update(id, {
-        ...acronym,
-        isFavorite: !acronym.isFavorite
+      const concept = concepts.find(c => c.Id === id)
+      const updatedConcept = await acronymService.update(id, {
+        ...concept,
+        isFavorite: !concept.isFavorite
       })
-      setAcronyms(prev => prev.map(a => a.Id === id ? updatedAcronym : a))
+      setConcepts(prev => prev.map(c => c.Id === id ? updatedConcept : c))
     } catch (err) {
-      throw new Error("Failed to update acronym")
+      throw new Error("Failed to update concept")
     }
   }
 
-  const handleRetry = () => {
-    loadAcronyms()
+const handleRetry = () => {
+    loadConcepts()
   }
 
   if (loading) return <Loading />
@@ -96,16 +96,16 @@ function App() {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h1 className="text-5xl font-display font-bold gradient-text mb-4">
-            Acronify
+<h1 className="text-5xl font-display font-bold gradient-text mb-4">
+            ConceptLearner
           </h1>
           <p className="text-xl text-gray-300 font-body max-w-2xl mx-auto">
-            Transform any text into memorable acronyms with AI-powered intelligence
+            Transform complex texts into digestible 150-word learning concepts
           </p>
         </motion.div>
 
-        {/* Search Bar */}
-        {acronyms.length > 0 && (
+{/* Search Bar */}
+        {concepts.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -115,14 +115,14 @@ function App() {
             <SearchBar 
               value={searchQuery}
               onChange={setSearchQuery}
-              placeholder="Search your acronyms..."
+              placeholder="Search your learning concepts..."
             />
           </motion.div>
         )}
 
         {/* Main Content */}
-        <AnimatePresence mode="wait">
-          {filteredAcronyms.length === 0 && !loading ? (
+<AnimatePresence mode="wait">
+          {filteredConcepts.length === 0 && !loading ? (
             <Empty onCreateNew={() => setIsModalOpen(true)} />
           ) : (
             <motion.div
@@ -133,8 +133,8 @@ function App() {
               transition={{ duration: 0.4 }}
             >
               <AcronymGrid 
-                acronyms={filteredAcronyms}
-                onDelete={handleDeleteAcronym}
+                acronyms={filteredConcepts}
+                onDelete={handleDeleteConcept}
                 onToggleFavorite={handleToggleFavorite}
               />
             </motion.div>
@@ -144,11 +144,11 @@ function App() {
         {/* Floating Action Button */}
         <FloatingActionButton onClick={() => setIsModalOpen(true)} />
 
-        {/* Create Acronym Modal */}
+{/* Create Concept Modal */}
         <CreateAcronymModal 
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          onCreate={handleCreateAcronym}
+          onCreate={handleCreateConcept}
         />
 
         {/* Toast Container */}

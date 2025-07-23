@@ -7,23 +7,23 @@ import FormField from "@/components/molecules/FormField"
 import Textarea from "@/components/atoms/Textarea"
 import Input from "@/components/atoms/Input"
 import ApperIcon from "@/components/ApperIcon"
-import { generateAcronym } from "@/utils/acronymGenerator"
+import { summarizeText } from "@/utils/acronymGenerator"
 
 const CreateAcronymModal = ({ isOpen, onClose, onCreate }) => {
-  const [formData, setFormData] = useState({
+const [formData, setFormData] = useState({
     originalText: "",
     category: ""
   })
-  const [generatedAcronym, setGeneratedAcronym] = useState(null)
-  const [isGenerating, setIsGenerating] = useState(false)
+const [generatedConcept, setGeneratedConcept] = useState(null)
+const [isSummarizing, setIsSummarizing] = useState(false)
   const [isCreating, setIsCreating] = useState(false)
   const [errors, setErrors] = useState({})
 
   useEffect(() => {
     if (!isOpen) {
       // Reset form when modal closes
-      setFormData({ originalText: "", category: "" })
-      setGeneratedAcronym(null)
+setFormData({ originalText: "", category: "" })
+      setGeneratedConcept(null)
       setErrors({})
     }
   }, [isOpen])
@@ -33,81 +33,81 @@ const CreateAcronymModal = ({ isOpen, onClose, onCreate }) => {
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: "" }))
     }
-    // Clear generated acronym when text changes
-    if (field === "originalText" && generatedAcronym) {
-      setGeneratedAcronym(null)
+// Clear generated concept when text changes
+    if (field === "originalText" && generatedConcept) {
+      setGeneratedConcept(null)
     }
   }
 
   const validateForm = () => {
     const newErrors = {}
     
-    if (!formData.originalText.trim()) {
-      newErrors.originalText = "Please enter some text to convert"
-    } else if (formData.originalText.trim().length < 10) {
-      newErrors.originalText = "Text should be at least 10 characters long"
-    } else if (formData.originalText.trim().length > 500) {
-      newErrors.originalText = "Text should be less than 500 characters"
+if (!formData.originalText.trim()) {
+      newErrors.originalText = "Please enter some text to summarize"
+    } else if (formData.originalText.trim().length < 50) {
+      newErrors.originalText = "Text should be at least 50 characters long for effective summarization"
+    } else if (formData.originalText.trim().length > 2000) {
+      newErrors.originalText = "Text should be less than 2000 characters"
     }
 
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
 
-  const handleGenerateAcronym = async () => {
+const handleSummarizeText = async () => {
     if (!validateForm()) return
 
-    setIsGenerating(true)
+    setIsSummarizing(true)
     try {
-      const result = await generateAcronym(formData.originalText.trim())
-      setGeneratedAcronym(result)
-      toast.success("Acronym generated successfully!")
+      const result = await summarizeText(formData.originalText.trim())
+      setGeneratedConcept(result)
+      toast.success("Concept generated successfully!")
     } catch (err) {
-      toast.error(err.message || "Failed to generate acronym")
+      toast.error(err.message || "Failed to generate concept")
     } finally {
-      setIsGenerating(false)
+      setIsSummarizing(false)
     }
   }
 
-  const handleCreateAcronym = async () => {
-    if (!generatedAcronym) return
+const handleCreateConcept = async () => {
+    if (!generatedConcept) return
 
     setIsCreating(true)
     try {
-      const acronymData = {
-        ...generatedAcronym,
+      const conceptData = {
+        ...generatedConcept,
         originalText: formData.originalText.trim(),
         category: formData.category.trim() || "General",
         createdAt: new Date().toISOString(),
         isFavorite: false
       }
 
-      await onCreate(acronymData)
-      toast.success("Acronym created successfully!")
+      await onCreate(conceptData)
+      toast.success("Learning concept saved successfully!")
     } catch (err) {
-      toast.error(err.message || "Failed to create acronym")
+      toast.error(err.message || "Failed to save concept")
     } finally {
       setIsCreating(false)
     }
   }
 
-  const handleRegenerateAcronym = async () => {
+const handleRegenerateConcept = async () => {
     if (!formData.originalText.trim()) return
     
-    setIsGenerating(true)
+    setIsSummarizing(true)
     try {
-      const result = await generateAcronym(formData.originalText.trim(), true) // Force regeneration
-      setGeneratedAcronym(result)
-      toast.success("New acronym generated!")
+      const result = await summarizeText(formData.originalText.trim(), true) // Force regeneration
+      setGeneratedConcept(result)
+      toast.success("New concept generated!")
     } catch (err) {
-      toast.error(err.message || "Failed to regenerate acronym")
+      toast.error(err.message || "Failed to regenerate concept")
     } finally {
-      setIsGenerating(false)
+      setIsSummarizing(false)
     }
   }
 
-  const characterCount = formData.originalText.length
-  const maxCharacters = 500
+const characterCount = formData.originalText.length
+  const maxCharacters = 2000
 
   return (
     <AnimatePresence>
@@ -130,8 +130,8 @@ const CreateAcronymModal = ({ isOpen, onClose, onCreate }) => {
             <div className="glass rounded-2xl border border-white/20 shadow-2xl">
               {/* Header */}
               <div className="flex items-center justify-between p-6 border-b border-white/10">
-                <h2 className="text-2xl font-display font-bold gradient-text">
-                  Create New Acronym
+<h2 className="text-2xl font-display font-bold gradient-text">
+                  Create Learning Concept
                 </h2>
                 <IconButton
                   variant="ghost"
@@ -146,19 +146,19 @@ const CreateAcronymModal = ({ isOpen, onClose, onCreate }) => {
               <div className="p-6 space-y-6">
                 {/* Text Input */}
                 <FormField
-                  label="Text to Convert"
+label="Text to Summarize"
                   error={errors.originalText}
                   required
                 >
                   <Textarea
-                    placeholder="Enter the text you want to convert into a memorable acronym..."
+placeholder="Enter the long text you want to transform into a digestible learning concept..."
                     value={formData.originalText}
                     onChange={(e) => handleInputChange("originalText", e.target.value)}
                     rows={4}
                     className="resize-none"
                   />
                   <div className="flex justify-between items-center mt-2 text-xs text-gray-400">
-                    <span>Minimum 10 characters for best results</span>
+<span>Minimum 50 characters for effective summarization</span>
                     <span className={characterCount > maxCharacters ? "text-error" : ""}>
                       {characterCount}/{maxCharacters}
                     </span>
@@ -177,87 +177,78 @@ const CreateAcronymModal = ({ isOpen, onClose, onCreate }) => {
                 </FormField>
 
                 {/* Generate Button */}
-                <div className="flex justify-center">
+<div className="flex justify-center">
                   <Button
-                    onClick={handleGenerateAcronym}
-                    disabled={isGenerating || !formData.originalText.trim()}
+                    onClick={handleSummarizeText}
+                    disabled={isSummarizing || !formData.originalText.trim()}
                     className="px-8"
                   >
-                    {isGenerating ? (
+                    {isSummarizing ? (
                       <>
                         <ApperIcon name="Loader2" className="w-4 h-4 mr-2 animate-spin" />
-                        Generating...
+                        Summarizing...
                       </>
                     ) : (
                       <>
-                        <ApperIcon name="Sparkles" className="w-4 h-4 mr-2" />
-                        Generate Acronym
+                        <ApperIcon name="Brain" className="w-4 h-4 mr-2" />
+                        Generate Learning Concept
                       </>
                     )}
                   </Button>
                 </div>
 
-                {/* Generated Acronym Display */}
+{/* Generated Concept Display */}
                 <AnimatePresence>
-                  {generatedAcronym && (
+                  {generatedConcept && (
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -20 }}
                       className="space-y-4"
                     >
-                      {/* Acronym Result */}
+                      {/* Concept Result */}
                       <div className="glass rounded-xl p-6 border border-primary/20 bg-gradient-to-br from-primary/10 to-accent/10">
                         <div className="text-center mb-4">
-                          <h3 className="text-3xl font-display font-bold gradient-text mb-2">
-                            {generatedAcronym.acronym}
+                          <h3 className="text-2xl font-display font-bold gradient-text mb-2">
+                            Learning Concept Summary
                           </h3>
-                          <p className="text-gray-300 text-sm">Your memorable acronym</p>
+                          <p className="text-gray-300 text-sm">~150 words | Digestible format</p>
                         </div>
 
-                        {/* Breakdown */}
-                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                          {generatedAcronym.breakdown.map((item, index) => (
-                            <motion.div
-                              key={index}
-                              initial={{ opacity: 0, scale: 0.8 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              transition={{ duration: 0.3, delay: index * 0.1 }}
-                              className="glass rounded-lg p-3 text-center border border-white/10"
-                            >
-                              <div className="text-xl font-bold text-primary mb-1">
-                                {item.letter}
-                              </div>
-                              <div className="text-sm text-gray-300">
-                                {item.word}
-                              </div>
-                            </motion.div>
-                          ))}
+                        {/* Summary Content */}
+                        <div className="bg-white/5 rounded-lg p-4 border border-white/10 mb-6">
+                          <p className="text-gray-200 leading-relaxed text-sm">
+                            {generatedConcept.summary}
+                          </p>
+                          <div className="flex justify-between items-center mt-3 pt-3 border-t border-white/10 text-xs text-gray-400">
+                            <span>Word count: ~{generatedConcept.summary.split(/\s+/).length} words</span>
+                            <span>Optimized for learning retention</span>
+                          </div>
                         </div>
 
                         {/* Action Buttons */}
-                        <div className="flex justify-center gap-3 mt-6">
+                        <div className="flex justify-center gap-3">
                           <Button
                             variant="secondary"
-                            onClick={handleRegenerateAcronym}
-                            disabled={isGenerating}
+                            onClick={handleRegenerateConcept}
+                            disabled={isSummarizing}
                           >
                             <ApperIcon name="RefreshCw" className="w-4 h-4 mr-2" />
                             Regenerate
                           </Button>
                           <Button
-                            onClick={handleCreateAcronym}
+                            onClick={handleCreateConcept}
                             disabled={isCreating}
                           >
                             {isCreating ? (
                               <>
                                 <ApperIcon name="Loader2" className="w-4 h-4 mr-2 animate-spin" />
-                                Creating...
+                                Saving...
                               </>
                             ) : (
                               <>
                                 <ApperIcon name="Save" className="w-4 h-4 mr-2" />
-                                Save Acronym
+                                Save Learning Concept
                               </>
                             )}
                           </Button>

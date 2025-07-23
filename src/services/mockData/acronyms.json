@@ -1,45 +1,24 @@
 [
   {
     "Id": 1,
-    "acronym": "SMART",
-    "originalText": "Setting clear objectives requires being Specific, Measurable, Achievable, Relevant, and Time-bound to ensure success in project management and personal development goals.",
-    "breakdown": [
-      { "letter": "S", "word": "Specific" },
-      { "letter": "M", "word": "Measurable" },
-      { "letter": "A", "word": "Achievable" },
-      { "letter": "R", "word": "Relevant" },
-      { "letter": "T", "word": "Time-bound" }
-    ],
+    "summary": "Effective project management requires setting SMART goals that are Specific, Measurable, Achievable, Relevant, and Time-bound. This framework ensures clarity and focus in both professional and personal development initiatives. By defining clear parameters, teams can track progress effectively and maintain accountability throughout the project lifecycle. The SMART criteria help eliminate ambiguity and provide a structured approach to goal achievement, making it easier to evaluate success and identify areas for improvement. This methodology has proven successful across various industries and continues to be a fundamental principle in strategic planning and execution.",
+    "originalText": "Setting clear objectives requires being Specific, Measurable, Achievable, Relevant, and Time-bound to ensure success in project management and personal development goals. Without these criteria, projects often lack direction and teams struggle to understand expectations. The framework provides structure and accountability.",
     "createdAt": "2024-01-15T10:30:00Z",
     "category": "Productivity",
     "isFavorite": true
   },
   {
     "Id": 2,
-    "acronym": "PEACE",
-    "originalText": "Mindfulness practices help us find inner calm through being Present, Embracing acceptance, Acknowledging thoughts without judgment, Cultivating compassion, and Establishing daily routines.",
-    "breakdown": [
-      { "letter": "P", "word": "Present" },
-      { "letter": "E", "word": "Embracing" },
-      { "letter": "A", "word": "Acknowledging" },
-      { "letter": "C", "word": "Cultivating" },
-      { "letter": "E", "word": "Establishing" }
-    ],
+    "summary": "Mindfulness practices offer a pathway to inner peace through present-moment awareness and acceptance. By embracing what is, acknowledging thoughts without judgment, and cultivating compassion, individuals can develop emotional resilience and mental clarity. Establishing daily mindfulness routines creates lasting habits that support overall well-being. These practices help reduce stress, improve focus, and enhance emotional regulation. Regular mindfulness meditation has been scientifically proven to reduce anxiety and depression while promoting a sense of calm and centeredness in daily life.",
+    "originalText": "Mindfulness practices help us find inner calm through being Present, Embracing acceptance, Acknowledging thoughts without judgment, Cultivating compassion, and Establishing daily routines. These techniques reduce stress and anxiety while promoting emotional well-being and mental clarity.",
     "createdAt": "2024-01-14T15:45:00Z",
     "category": "Wellness",
     "isFavorite": false
   },
   {
     "Id": 3,
-    "acronym": "LEARN",
-    "originalText": "Effective studying involves Listening actively, Engaging with material, Asking questions, Reviewing regularly, and taking detailed Notes to retain information better.",
-    "breakdown": [
-      { "letter": "L", "word": "Listening" },
-      { "letter": "E", "word": "Engaging" },
-      { "letter": "A", "word": "Asking" },
-      { "letter": "R", "word": "Reviewing" },
-      { "letter": "N", "word": "Notes" }
-    ],
+    "summary": "Effective learning strategies encompass active listening, meaningful engagement with material, and consistent review practices. Students who ask thoughtful questions and take detailed notes demonstrate better information retention and comprehension. Active participation in the learning process, rather than passive consumption, leads to deeper understanding and longer-term memory formation. Regular review sessions help consolidate knowledge and identify gaps in understanding. These evidence-based techniques have been shown to improve academic performance and create more efficient study habits that benefit learners throughout their educational journey.",
+    "originalText": "Effective studying involves Listening actively, Engaging with material, Asking questions, Reviewing regularly, and taking detailed Notes to retain information better. Students who use these techniques consistently show improved academic performance and better long-term retention of concepts.",
     "createdAt": "2024-01-13T09:15:00Z",
     "category": "Education",
     "isFavorite": true
